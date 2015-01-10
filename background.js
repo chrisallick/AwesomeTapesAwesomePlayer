@@ -2,8 +2,7 @@ function playNextSong() {
     current_song++;
 
     if( current_song <= songs.length ) {
-        var url = getURL(songs[current_song]);
-        playSong(url);
+        getURLAndPlay(songs[current_song]);
     }
 }
 
@@ -42,15 +41,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.type == "songs") {
         songs = request.data;
         sendResponse("received songs");
+        
         playNextSong();
     }
 });
 
-function getURL(base) {
+function getURLAndPlay(base) {
     var url = "http://clubsexytime.com/projects/awesometapes/get.url.php?tape=" + base;
     $.get(url,function(response){
         chrome.extension.getBackgroundPage().console.log(response);
 
-        return response;
+        playSong(response);
     });
 }
