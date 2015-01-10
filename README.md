@@ -11,6 +11,10 @@ Pretty Simple.
 
 The Chrome extension will autoplay the first song and loop through them.
 
+# PHP
+
+The php file is simply figuring out how the server wants to sign the mp3s so the player can correctly load them. Technically a totes hack, but whatevah.
+
 # TODO:
 
 Add a GUI so you can see what's happening.
