@@ -11,7 +11,13 @@ $(document).ready(function() {
         songs.push( src );
     });
 
-    chrome.runtime.sendMessage({type:"songs",data:songs},function(response) {
-        console.log(response);
-    });
+    if( songs.length > 0 ) {
+        chrome.runtime.sendMessage({type:"songs",data:songs},function(response) {
+            console.log(response);
+        });
+    }
+
+    addEventListener("unload", function (event) {
+        chrome.runtime.sendMessage({type:"pause"},function(response) {});
+    }, true);
 });

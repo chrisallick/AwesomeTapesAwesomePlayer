@@ -6,8 +6,9 @@ function playNextSong() {
     }
 }
 
+var audio;
 function playSong(url) {
-    var audio = new Audio();
+    audio = new Audio;
     
     audio.onerror = function() {
         var _msg = "error playing song";
@@ -39,10 +40,18 @@ var songs;
 var current_song = -1;
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.type == "songs") {
+        if( audio ) {
+            audio.pause();
+        }
+        
+        current_song = -1;
+        
         songs = request.data;
         sendResponse("received songs");
         
         playNextSong();
+    } else if( request.type == "pause" ) {
+        audio.pause();
     }
 });
 
