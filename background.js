@@ -1,3 +1,12 @@
+function playNextSong() {
+    current_song++;
+
+    if( current_song <= songs.length ) {
+        var url = getURL(songs[current_song]);
+        playSong(url);
+    }
+}
+
 function playSong(url) {
     var audio = new Audio();
     
@@ -21,22 +30,19 @@ function playSong(url) {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
             chrome.tabs.sendMessage(tabs[0].id, {type:"msg",msg:_msg}, function(response) {});  
         });
-        current_song++;
-        if( current_song <= songs.length ) {
-            playSong(current_song);
-        }
+        playNextSong();
     });
     audio.src = url;
     audio.load();
 }
 
 var songs;
-var current_song = 0;
+var current_song = -1;
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.type == "songs") {
         songs = request.data;
         sendResponse("received songs");
-        var url = getURL(songs[0]);
+        playNextSong();
     }
 });
 
@@ -44,6 +50,7 @@ function getURL(base) {
     var url = "http://clubsexytime.com/projects/awesometapes/get.url.php?tape=" + base;
     $.get(url,function(response){
         chrome.extension.getBackgroundPage().console.log(response);
-        playSong(response);
+
+        return response;
     });
 }
